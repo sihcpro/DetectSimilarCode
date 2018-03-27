@@ -2,8 +2,29 @@
 
 
 2.4 Những công nghệ khác:
+
 Thay cho việc sử dụng k-grams, nhận diện chuỗi fingerprint có thể đưọc chọn bởi việc tìm kiếm câu hoặc đoạn văn hoặc chọn những xâu có độ dài xác định mà bắt đầu với ( "anchor" words ) từ xác định bắt đầu 1 đoạn( chương). Những phiên bản đầu tiên của hệ thống của chúng tôi chỉ sử dụng cấu trúc đưọc lấy từ văn bản để chọn những chuỗi con fingerprint. Sự khó khăn với những chương trình như vậy, theo kinh nghiệm của chúng tôi, là sự thực hiện trở nên khá cụ thể cho 1 loại dữ liệu. Nếu theo văn bản Tiếng Anh, ví dụ, chọn vài câu như là đơn vị cho việc xây dựng bảng băm theo ngữ nghĩa tiếng Anh thì sau này sẽ khó hơn khi sử dụng cho hện thống fingerprint, như là chưong trình C, nó không giống những câu tiếng Anh. Thêm nữa, ngay cả khi trên bộ dữ liệu tổng hợp thì chưa chắc chắn 1 câu đã là một câu hợp lí: đầu vào có thể là 1 văn bản với 1 bảng lớn, 1 danh bạn, hoặc Joyce’s Finnegans Wake. Theo kinh nghiệm của chúng tôi, việc sử dụng k-grams như là đơn vi của việc băm thì mạnh hơn là dựa trên những trường hợp tương tự được tổng hợp từ số lần xuất hiện của 1 cấu trúc trong khi nhập.
+
 Có nhiều cách tiếp cận để phát hiện sao chép mà không phụ thuộc vào fingerprinting. Như là ở SCAM, được biết đến 1 hện thống phát hiện sao chép, 1 trong những ý tưởng là cho rằng 2 văn bản là giống nhau nếu khoảng cách giữa những vector đặc trưng đại diện cho chúng là nhỏ. Những đặc trưng ở đây hiểu là những từ, và khái niệm về khoảng cách là mức độ biến đổi ( khác nhau) được tính bằng sự tính toán thông tin tương đồng. -  The features are words, and the notion of distance is a variation on standard information-retrieval measures of similarity
+
 Baker xem xét rằng vấn đề tìm kiếm đoạn gần giống nhau( near-duplication ) trong 1 phần mềm và vấn đề biểu diễn khái niệm những tham số khớp nhau( parameterized matches), hoặc p-matches. Xem xét 2 xâu, vài từ của chúng đưọc chỉ định như là các tham số. 2 xâu khớp nhau nếu việc đổi tên tham số khiến cho chúng bằng nhau. Ví dụ, nếu chúng ta chọn những tham số là các tên biến, sau đó, 2 phần của mã chưong trình có thể được xem nhưng là bằng nhau nếu việc đổi tên các biến sẽ đưa chưong trình này thành chương trình  còn lại. Baker đưa ra 1 thuật toán để tính toán p-matches và đưa ra báo cáo về kinh nghiệm và cách cài đặt trong [2] và trong những trang sau xem xét làm sao để tích hợp những y tưởng đó và trong việc ghép k-grams [3].
+
 Nó rất quan trọng trong sự phân biệt quá trình phát hiện sao chép giữa dữ liệu rời rạc và dữ liệu liên tục. Với dữ liệu rời rạc, như là những file văn bản và source chương trình, sau sự đàn áp( suppression ) đơn giản của những mảnh văn bản không không quan trọng, kết hợp chính xác trên từng xâu con còn lại là một khái niệm hữu ích. Với dữ liệu liên tục, như là dio, video và ảnh, chúng đã có một số hệ thống phát hiện bản sao thương mại được xây dựng nhưng tương đối ít đã được xuất bản trong tài liệu mở [13]. Vấn đề bây giờ trở nên khó hơn, bởi vì rất nhiều bản sao của các ảnh giống nhau, ví dụ, có thể có những chuỗi bit đại diện hoàn toàn khác nhau, cần một bước đầu tiên tinh vi hơn để trích xuất các tính năng tương tự trước khi kết hợp có thể được thực hiện.
 
+Mở rộng ra từ phát hiện sao chép nhưng vẫn liên quan, đó là Digital Rights Management (DRM). Hệ thống DRM tìm kiểm để giải quyết vấn đề sở hữu trí tuệ bằng cách ngăn ngừa hoặc kiểm soát việc sao chép tài liệu. Kế hoạch DRM dựa trên sự mả hóa: nội dung có gía trị đưọc bảo vệ bằng mã hóa nó và chỉ có thể được dùng bởi những ngưòi được cấp phép dưới dạng khóa giải mã. Tuy nhiên, bất kể công nghệ phòng ngừa sao chép nào đưọc chọn, phải có những người dùng cuối cùng có quyền truy cập vào các tài liệu không được bảo mật bằng cách nào đó - không thì họ không thể sử dụng chúng - và như đã nói đến ở Phần 1, nó gióng như một điều luật tự nhiên mà nội dung số đưọc sao chép. Chúng ta tìm ra bản thân mình trong thỏa thuận về [4]: cho ít nhất một vài kiểu hệ thống ngăn chặn sao chép truyền thông số sẽ gặp khó khăn trong việc đạt thành công cuối cùng. Chúng tôi nghi ngờ rằng trong một vài môi trường, điều tốt nhất mọi người có thể hi vọng là một một chưong trình phát hiện sao chép hiệu quả.
+
+
+3. WINNOWING
+
+Trong phần này, chúng ta miêu tả và phân tích thuật toán winnowing để chọn fingerprints từ những bảng băm của k-grams. Chúng ta cho 1 ràng buộc trên về hiệu quả của winnowing, được biểu hiện bằng sự cân bằng giữa số lưọng fingerprints phải được chọn và phần khớp ngắn nhất mà chúng tôi đã đảm bảo được phát hiện.
+
+Cho 1 tập các văn bản, chúng tôi muốn tìm những xâu con phù hợp mà giữa chúng thỏa mãn 2 tính chất:
+
+1. Nếu có 1 xâu con khớp dài tối thiểu bằng ngưỡng được đảm bảo ( guarantee threshold), t, thì sự khớp này được nhận ra.
+2. Chúng tôi không nhận ra bất cứ khớp nào ngắn hơn ngưỡng nhiễu ( noise threshold), k.
+
+Hằng số t và k <= t là được chọn bởi người dùng. Chúng tôi tránh việc khớp những xâu dưới ngưỡng nhiễu bằng việc xem xét chỉ những băm của k-grams. k càn lớn, chúng ta càng khẳng định những điểm khớp giữa các văn bản không phải là tình cờ. Mặt khác, gía trị của k càng lớn cũng giới hạn sự nhạy cảm đối với việc nội dung bị sắp xếp lại, nên chúng ta không thể phát hiện những sự đổi chổ trong những xâu con có độ dài nhỏ hơn k. Do đó, nó rất là quan trọng để chọn k để giảm tối đa gía trị mà bị loại bỏ do trùng hợp ngẫu nhiên( xem ở phần 5).
+
+Những số liệu 2(a)-(d) được chép lại từ số liệu 1 để tiện và cho thấy một dãy băm của 5-grams có nguồn gốc từ vài đoạn mẫu.
+
+Cho 1 chuỗi các băm h1..hn, nếu n > (t-k), thì ít nhất 1 trong hi phải được chọn để đảm bảo phát hiện cho tất cả những chuỗi khớp có độ dài ít nhất là t.  
