@@ -47,7 +47,34 @@ ll junger= 0, mid= 0, top= 0, bot= 0, result= 0, sum= 0, s= 0, t= 0, d= 0, l= 0,
 bool kt= false, t1= false, t2= false;
 string s1, s2;
 
-string getString(string &str, int start_pos){
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+string getOnlyString(string &str, int start_pos){
 	char c= tolower( str[start_pos] );
 	string result= "";
 	while( 'a' <= c and c <= 'z' ){
@@ -63,6 +90,61 @@ int getInclude(string &str, int start_pos){
 		length++;
 	return length+1;
 }
+
+string getString(string &str, int start_pos){
+	string result= "";
+	while( !( str[start_pos] == ' ' || str[start_pos] == '\t' || str[start_pos] == '\n' ) )
+		result.PB(str[start_pos++]);
+	return result;
+}
+string getLine(string &str, int start_pos){
+	string result= "";
+	while( str[start_pos] != '\n' )
+		result.PB(str[start_pos++]);
+	return result;
+}
+string getInBracket(string &str, int start_pos){
+	string result= "";
+	while( str[start_pos-1] != ')' )
+		result.PB(str[start_pos++]);
+	return result;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+class Define{
+private:
+	string variable, true_name, variable_replace;
+	bool have_variable;
+public:
+	Define(string string_define, string replace_by= "", bool _have_variable= false){
+		true_name= string_define;
+		true_name= replace_by;
+	}
+};
+
+map< string, Define > mapDefine;
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -91,39 +173,53 @@ int main()
 	// 		fout << endl;
 	// }
 
-	s2= "";
+	s1= "";
 	while( !fin.eof() ){
-		getline( fin, s1 );
-		s2+= s1+"\n";
+		getline( fin, s2 );
+		s1+= s2+"\n";
 	}
-	// fout << s2;
+	// fout << s1;
 	n= 0;
-	while( n < s2.length() ){
-		switch( s2[n] ){
+	while( n < s1.length() ){
+		switch( s1[n] ){
 			case '#':
-				s1= getString(s2, n+1);
-				n+= s1.length()+2;
+				s2= getOnlyString(s1, n+1);
+				n+= s2.length()+2;
 				// cout << s1.length() << endl;
 				// fout << s1 << endl;
 				if( !s1.compare( "include" ) ){
-					// cout << s2.substr(n, getInclude(s2, n)) << endl;
-					n+= getInclude(s2, n);
+					// cout << s1.substr(n, getInclude(s1, n)) << endl;
+					n+= getInclude(s1, n);
 					// cout << s2[n] << endl;
 				}
 				else { // define
+					s2= getOnlyString(s1, n);
+					n+= s2.length();
+					// cout << s2 << endl;
+					string s3;
+					if( s1[n] == '(' )
+						s3= getInBracket(s1, n);
+					else
+						s3= getString(s1, n);
+					n+= s3.length();
+					s3= s2+s3;
+					string s4= getLine(s1, n+1);
 
+					cout << s3 << " : " << s4 << endl;
 				}
 				continue;
-			case ' ':
-			case '\t':
-			case '\n':
-				n++;
-				continue;
-			case '\\':
-				if( s2[n+1] == '\\' )
+			// case ' ':
+			// case '\t':
+			// case '\n':
+			// 	n++;
+			// 	continue;
+			case '/':
+				if( s1[n+1] == '/' )
+					n+= getLine(s1, n).length();
+				// continue;
 			default: ;
 		}
-		fout << s2[n++];
+		fout << s1[n++];
 	}
 
 
