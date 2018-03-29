@@ -27,4 +27,17 @@ Hằng số t và k <= t là được chọn bởi người dùng. Chúng tôi t
 
 Những số liệu 2(a)-(d) được chép lại từ số liệu 1 để tiện và cho thấy một dãy băm của 5-grams có nguồn gốc từ vài đoạn mẫu.
 
-Cho 1 chuỗi các băm h1..hn, nếu n > (t-k), thì ít nhất 1 trong hi phải được chọn để đảm bảo phát hiện cho tất cả những chuỗi khớp có độ dài ít nhất là t.  
+Cho 1 chuỗi các băm h1..hn, nếu n > (t-k), thì ít nhất 1 trong hi phải được chọn để đảm bảo phát hiện cho tất cả những chuỗi khớp có độ dài ít nhất là t. Từ đó cho thấy cách tiếp cận đơn gỉan sau. cho kích thước khung( window size) bằng w = t-k+1. Xem xét chuỗi băm h1h2...hn mà nó đại diện cho 1 văn bản. Tại mỗi vị trí 1 <= i <= n-w+1 trong chuỗi xác định 1 khung của các hash hi...h(i+w-1). Để duy trì sự đảm bảo thì nó cần chọn gía trị 1 hash từ mọi khung để trở thành fingerprint cho đoạn văn. (Điều này cũng đủ, xem ở Lemma 1). Trong thực tế, chúng ta đã tìm ra những chiến lược là việc tốt sau.
+
+DEFINITION 1 (WINNOWING). Trong mỗi khung chọn gía trị băm nhỏ nhất. Nếu có nhiều hơn 1 băm với gía trị nhỏ nhất, chọn cái bên phải nhất. Giờ lưu tất cả những băm đã được chọn như là những fingerprints của văn bản.
+
+Số liệu 2(e) cho những khung có độ dài bằng 4 của chuỗi các băm từ số liệu 2(d). Mỗi băm mà được chọn thì được biểu diễn in đậm( nhưng chỉ 1 lần, trong khung đầu tiên chọn băm đó). Trực giác đằng sau việc chọn băm nhỏ nhất là cái băm nhỏ nhất trong 1 khung rất giống với băm nhỏ nhất trong khung bên cạnh, bởi vì những tỉ lệ mà số ngẫu nhiên w nhỏ nhất là nhỏ hơn một số ngẫu nhiên được thêm vào( since the odds are that the minimum of w random numbers is smaller than one additional random number). Do đó, nhiều những khung chồng lên nhau chọn cùng một băm, và số lưọng fingerprint đã chọn thì xem ra nhỏ hơn số lượng số lượng khung trong khi vẫn chứa gía trị đảm bảo. Số liệu 2(f) cho thấy tập fingerprint đã chọn bởi winnowing trong ví dụ.
+
+Trong nhiều ứng dụng nó có ích trong việc lưu lại không chỉ fingerprint của 1 văn bản mà còn vị trí của các fingerprint trong văn bản. Ví dụ, chúng ta cần vị trí của thông tin để thể hiện độ khớp nhau của xâu con trong 1 giao diện người dùng. Một sự phát triển hiệu quả của winnowing  cũng cần gĩư lại vị trí của fingerprint đưọc chọn gần nhất. Số liệu 2(g) cho thấy tập của những cặp ơfingerprint, vị trí] như ví dụ( vị trí đầu được tính từ 0). Để tránh làm phức tạp của việc đánh chỉ mục cho tất băm với vị trí của nó trong chuỗi băm tổng thể với k-grams trong 1 văn bản, chúng tôi bỏ qua hầu hết sự liên quan đến vị trí của k-grams trong văn bản trong bài thuyết trình của chúng tôi.
+
+
+3.1 Expected Density ( Mật độ kì vọng)
+
+
+
+

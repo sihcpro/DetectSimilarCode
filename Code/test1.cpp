@@ -47,18 +47,85 @@ ll junger= 0, mid= 0, top= 0, bot= 0, result= 0, sum= 0, s= 0, t= 0, d= 0, l= 0,
 bool kt= false, t1= false, t2= false;
 string s1, s2;
 
-int tl[55], nh[55];
-string st[55];
+string getString(string &str, int start_pos){
+	char c= tolower( str[start_pos] );
+	string result= "";
+	while( 'a' <= c and c <= 'z' ){
+		result.PB( str[start_pos++] );
+		c= tolower( str[start_pos] );
+	}
+	return result;
+}
 
-int a[100];
+int getInclude(string &str, int start_pos){
+	int length= 1;
+	while( str[start_pos+length] != '>' )
+		length++;
+	return length+1;
+}
+
+
 
 int main()
 {
-	freopen("test.cpp", "r", stdin);
-	
-	
+	string fileName= "main01";
 
-	
+	ifstream fin (("Example/"+fileName+".cpp").c_str(), ifstream::in);
+	ofstream fout (("Result/"+fileName+".out").c_str(), ios::out | ios::trunc );
+
+	// while( !fin.eof()  ){
+	// 	// getline( fin, s1);
+	// 	fin >> s1;
+	// 	cout << s1 << endl;
+	// 	if( s1.compare(0,2,"//") == 0 ){
+	// 		getline(fin, s1);
+	// 		continue;
+	// 	}
+	// 	if( s1.compare("#define") == 0 ){
+
+	// 	}
+	// 	if( s1[0] == '#' || s1[0] == '{' )
+	// 		fout << endl;
+	// 	fout << s1 << " ";
+	// 	if( s1[s1.length()-1 ] == ';' || s1[s1.length()-1 ] == '}')
+	// 		fout << endl;
+	// }
+
+	s2= "";
+	while( !fin.eof() ){
+		getline( fin, s1 );
+		s2+= s1+"\n";
+	}
+	// fout << s2;
+	n= 0;
+	while( n < s2.length() ){
+		switch( s2[n] ){
+			case '#':
+				s1= getString(s2, n+1);
+				n+= s1.length()+2;
+				// cout << s1.length() << endl;
+				// fout << s1 << endl;
+				if( !s1.compare( "include" ) ){
+					// cout << s2.substr(n, getInclude(s2, n)) << endl;
+					n+= getInclude(s2, n);
+					// cout << s2[n] << endl;
+				}
+				else { // define
+
+				}
+				continue;
+			case ' ':
+			case '\t':
+			case '\n':
+				n++;
+				continue;
+			case '\\':
+				if( s2[n+1] == '\\' )
+			default: ;
+		}
+		fout << s2[n++];
+	}
+
 
 	return 0;
 }
