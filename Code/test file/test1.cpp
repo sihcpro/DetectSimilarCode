@@ -1,4 +1,5 @@
 #include <bits/stdc++.h>
+#include <unistd.h>
 
 using namespace std;
 
@@ -120,15 +121,23 @@ string getInBracket(string &str, int start_pos){
 
 
 
-
 class Define{
 private:
-	string variable, true_name, variable_replace;
+	string variable, true_name, string_replace;
 	bool have_variable;
 public:
-	Define(string string_define, string replace_by= "", bool _have_variable= false){
-		true_name= string_define;
-		true_name= replace_by;
+	Define(string string_define){
+		string tmp;
+		int n= 0;
+		cout << "Define :" << string_define << endl;
+		while( n < string_define.length() ){
+			tmp = getString(string_define, n);
+			cout << tmp << endl;
+			n+= tmp.length();
+			// cin >> tmp;
+			usleep(3000);
+			n++;
+		}
 	}
 };
 
@@ -193,19 +202,23 @@ int main()
 					// cout << s2[n] << endl;
 				}
 				else { // define
-					s2= getOnlyString(s1, n);
-					n+= s2.length();
+					string s3= getOnlyString(s1, n);
+					s2= getLine(s1, n);
+					mapDefine.insert( MP(s3, Define(s2) ) );
+					cout << mapDefine.size() << endl;
+					n+= s2.length()+1;
+					// n+= s2.length();
 					// cout << s2 << endl;
-					string s3;
-					if( s1[n] == '(' )
-						s3= getInBracket(s1, n);
-					else
-						s3= getString(s1, n);
-					n+= s3.length();
-					s3= s2+s3;
-					string s4= getLine(s1, n+1);
+					// string s3;
+					// if( s1[n] == '(' )
+					// 	s3= getInBracket(s1, n);
+					// else
+					// 	s3= getString(s1, n);
+					// n+= s3.length();
+					// s3= s2+s3;
+					// string s4= getLine(s1, n+1);
 
-					cout << s3 << " : " << s4 << endl;
+					// cout << s3 << " : " << s4 << endl;
 				}
 				continue;
 			// case ' ':

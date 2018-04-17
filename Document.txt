@@ -38,6 +38,22 @@ Trong nhiều ứng dụng nó có ích trong việc lưu lại không chỉ fin
 
 3.1 Expected Density ( Mật độ kì vọng)
 
+Nhắc lại rằng mật độ kì vọng của một fingerprinting algorithm là phần kì vọng của fingerprints được chọn trong số tất cả các gía trị bảng ghi đã được tính, cho gía trị vào random(Section 1). Chúng ta bắt đầu phân tích tỉ trọng của winnowing ngay bây giờ, điều đó sữ đưa ra sự cân bằng giữa ngưỡng đảm bảo và số lượng vân tay yêu cầu.
 
+Xem xét chương trình C mà ánh xạ vị trí mỗi vân tay được chọn đến vị trí đầu( bên trái cùng) cửa sổ, cái cửa sổ mà đã chọn trong tất cả cửa sổ trong đọa văn bản( Consider the function C that maps the position of each selected fingerprint to the position of the first (leftmost) window that selected it in the sequence of all windows for a documen ). Chúng ta nói chúng ta đang thay lượng lưu lại dấu vân tay cho cửa sổ được chỉ định. Chương trình thay đổi là hàm tăng tuyến tính - nó là, nếu p và q là vị trí của 2 vân tay được chọn và p < q thì C(p) < C(p).
+
+Để chứng minh điều này, gỉa thuyết những vân tay được chọn tại những vị trí phân biệt p và q với p < q nhưng C(p) > C(q). Thì cả 2 vị trí p và q là trong cùng khung. Cho hp là băm tại vị trí p và cho hq là băm tại vị trí q. Có 2 khả năng xảy ra: nếu hp == hq thì, vì p < q, khung C(p) không đưọc thay đổi với p và cũng không với q, vì C(q) < C(p). Nếu hp != hq thì một trong C(p) hoặc C(q) không được đổi. Cả 2 đều mâu thuẫn với gỉa thuyết. Chúng ta khẳng định rằng hàm thay đổi là hàm tăng tuyến tính.
+
+Để tính tiếp tục xử lí sâu hơn nhắc cho chúng ta là chuỗi các băm mà chúng ta đang winnowing là ngẫu nhiên. Chúng ta gỉa thuyết là phần không gian của các gía trị băm là rất lớn vì thế chúng ta có hể bỏ qua một cách an toàn khả năng rằng nó có 1 sự hạn chế cho gía trị nhỏ nhất với bất kì khung nhỏ nào. Chúng tôi đã minh họa rõ ràng gỉa thuyết này ở chương 5.
+
+Cân nhắc 1 biến random được chỉ định Xi mà là một nếu khung Wi thứ i được thay đổi. Xem xét khung liền kề phía bên trái Wi-1. Khoảng lặp lại ngoại trừ vị trí bên trái cùng và phải cùng. Sự liên tiếp của chúng là 1 khoảng có độ dài w+1. Xem xét vị trí p chứa băm nhỏ nhất trong khoảng liên tiếp đó. Bất cứ khungnaof mà nó chứa p chọn hp như là một dấu vân tay. Ta thấy có 3 trường hợp:
+
+1. Nếu p = i-1, vị trí bên trái cùng trong chuỗi, thì Wi-1 chọn nhó. Bởi vì p không thuộc Wi, chúng ta biết rằng Wi phải chọn như là 1 băm trong vị trí khác, q. Băm này được thay đổi sang Wi vì Wi  chọn nó, Wi-1 đã không chọn nó, và chương trình đổi là hàm tuyến tính tăng dần. Nên trong trường hợp này, Xi = 1.
+
+2.Nếu p=i+w-1, vị trí bên phải cùng trong chuỗi liên tiếp, thì Wi  chọn not. Wi phải được chọn cho nó. vì Wi cũng là vị trí bên trái cùng để chứa p. 1 lần nữa, Xi = 1.
+
+3. Nếu p là một trong các điểm còn lại trong chuỗi liên tục, cả Wi-1 và Wi chọn nó. Không quan trọng ai được thay đổi hành nó, nó sẽ không là Wi , vì Wi-1 là liên tục bên trái và cũng chọn nó. Nên trong trường hợp này, Xi = 0.
+
+2 trưòng hợp đầu tiên
 
 

@@ -1,24 +1,24 @@
-#include <bits/stdc++.h>
-// #include <conio.h>
 
-using namespace std;
+// 
+
+
 
 #define mp make_pair
 #define all(x) (x).begin(), (x).end()
 #define ldb ldouble
 #define PI 3.14159265
 
-//typedef tuple<int, int, int> t3;
+//#define t3 tuple<int, int, int> 
 // #define ll lll lll
 // #define lll long long 
-typedef long long ll;
-typedef unsigned long long ull;
-typedef double db;
-typedef long double ld;
-typedef pair <int, int> pii;
-typedef pair <ll, ll> pll;
-typedef pair <ll, int> pli;
-typedef pair <db, db> pdd;
+#define ll long long 
+#define ull unsigned long long 
+#define db double 
+#define ld long double 
+#define pii pair <int, int> 
+#define pll pair <ll, ll> 
+#define pli pair <ll, int> 
+#define pdd pair <db, db> 
 
 #define siz(x) (int)(x).size()
 #define Se second
@@ -42,9 +42,9 @@ typedef pair <db, db> pdd;
 #define outS(s) printf("%s\n", s)
 #define setA(a,n) for(ll i= 0; i < sizeof(a); i++) a[i]= n;
 
-typedef ll cap;
-typedef priority_queue<cap> pqmax;
-typedef priority_queue<cap, vector<cap>, greater<cap> > pqmin;
+#define cap ll 
+#define pqmax priority_queue<cap> 
+#define pqmin priority_queue<cap, vector<cap>, greater<cap> > 
 
 ll junger= 0, mid= 0, top= 0, bot= 0, result= 0, sum= 0, s= 0, t= 0, d= 0, l= 0, sp= 0, k= 0, x, y, n, m, test, r;
 bool kt= false, t1= false, t2= false;

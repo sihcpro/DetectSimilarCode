@@ -1,0 +1,13 @@
+signed
+unsigned
+
+short
+long
+
+bool
+char
+int
+float
+double
+wchar_t
+void
