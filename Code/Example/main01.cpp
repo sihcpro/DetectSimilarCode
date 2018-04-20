@@ -59,7 +59,6 @@ And you have to delete it! :v
 */
 #define ll long long
 #define ll long
-#define 
 
 int main()
 {

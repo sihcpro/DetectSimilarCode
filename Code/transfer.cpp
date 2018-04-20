@@ -9,7 +9,9 @@ using namespace std;
 
 #define PB( a ) push_back( (a) )
 
-string fileName= "main09.cpp";
+string fileName = "main09.cpp";
+string folderInput = "Compile";
+string folderOutput= "Transfer";
 string contents= "";
 
 map<string, int> typeData;
@@ -56,7 +58,7 @@ void initTypeData(){
 
 void getContent(){
 	string line;
-	ifstream fin (("PreCompile/"+fileName).c_str(), ifstream::in);
+	ifstream fin ((folderInput+"/"+fileName).c_str(), ifstream::in);
 	// cout << "Example/"+fileName << endl;
 	while( !fin.eof() ){
 		getline( fin, line);
@@ -163,20 +165,24 @@ int findDataType(string &str, int &start_pos, string &s1){
 	if( typeData.find( s1 ) == typeData.end() )
 		return 0;
 	int type= typeData[s1];
+	// cout << "s1 ========== " << s1 << endl;
+	start_pos+= s1.length();
 	switch( type/10 ){
 		case 0:
-			start_pos+= s1.length();
+			// start_pos+= s1.length();
 			skipSpace(str, start_pos);
 			s1= getNameVar(str, start_pos);
+			// start_pos+= s1.length();
 			return findDataType(str, start_pos, s1);
 		case 1:
+			// start_pos+= s1.length();
 			if( type < 12 ){
 				skipSpace(str, start_pos);
 				string s2 = getNameVar(str, start_pos);
-				start_pos+= s2.length();
-				cout << s1 << " -> " << s2 << " = " << type << endl;
+				// start_pos+= s2.length();
+				// cout << s1 << " -> " << s2 << " = " << type << endl;
 				int type2 = findDataType(str, start_pos, s2);
-					start_pos-= s2.length();
+					// start_pos-= s2.length();
 				if( type2 == 0 ){
 					return type;
 				}
@@ -242,7 +248,7 @@ void variableInFunc(string &str, int &start_pos, map<string, int> &m){
 		while( sp.length() == 0 )
 			sp= getNameVar(contents, ++start_pos);
 		int type= findDataType( contents, start_pos, sp);
-		start_pos+= data[type].length();
+		// start_pos+= data[type].length();
 
 		if( type/ 10 == 2 ){
 			skipSpace( contents, start_pos);
@@ -268,16 +274,18 @@ void variableInFunc(string &str, int &start_pos, map<string, int> &m){
 
 vector< map< string, int> > vec;
 int line= 1, deep= 0;
+bool error= false;
 
 void inside(string &result, int &n){
 	map<string, int> variable;
 	string s1, s2, s3, s4;
 
 	long m= n-1;
-	while( n < contents.length() ){
+	while( n < contents.length() && !error ){
 		if( m == n ){
-			cout << "Stop here!\n";
-			sleep(5);
+			cout << "Stop at line : " << line << " !\n";
+			error= true;
+			return;
 		}
 		m= n;
 
@@ -317,10 +325,12 @@ void inside(string &result, int &n){
 					result.PB(contents[n]);
 					n++;
 					deep--;
-					cout << "I'm out\n";
+					// cout << "I'm out\n";
 					return;
 				case '\n':
 					line++;
+					n++;
+					continue;
 				default: 
 					// cout << contents[n] << endl;
 					result.PB(contents[n]);
@@ -334,8 +344,8 @@ void inside(string &result, int &n){
 			if( typeData.find( s1 ) != typeData.end() ){
 				// cout << "found : " << s1 << " at: " << n << endl;
 				type= findDataType( contents, n, s1);
-				cout << type << " = " + data[type] << endl;
-				n+= data[type].length();
+				// cout << type << " = " + data[type] << endl;
+				// n+= data[type].length();
 
 				if( type/ 10 == 2 ){
 					skipSpace( contents, n);
@@ -353,7 +363,7 @@ void inside(string &result, int &n){
 				}
 				if( contents[n] == ')' )	continue;
 
-				cout << "variable = " << s2 << "  type = " << data[type] << endl;
+				// cout << "variable = " << s2 << "  type = " << data[type] << endl;
 				variable[s2]= type;
 				n+= s2.length();
 				skipSpace(contents, n);
@@ -381,7 +391,7 @@ void inside(string &result, int &n){
 					}
 				}
 				result = result + s2;
-				cout << "[" + s1 + "](" << result.length() << ")" << endl;
+				// cout << "[" + s1 + "](" << result.length() << ")" << endl;
 				n+= s1.length();
 			}
 
@@ -390,29 +400,36 @@ void inside(string &result, int &n){
 				n++;
 			}
 		}
-		cout << " n= " << n << " line= " << line << "  deep = " << deep << endl;
+		// cout << " n= " << n << " line= " << line << "  deep = " << deep << endl;
 
 	}
 }
 
-
 int main(int argc, char** argv){
-	if( argc > 1 )
-		fileName = argv[1];
+	switch( argc ){
+		case 1:
+			cout << "Warning no file name input in Transfer!\n";
+			break;
+		case 4:
+			folderOutput = argv[3];
+		case 3:
+			folderInput = argv[2];
+		case 2:
+			fileName = argv[1];
+	}
 	getContent();
 	initTypeData();
 
-	string result= "", s1, s2, s3, s4;
+	string result= "";
 	int n= 0, bracket= 0, type;
 	map<string, string> variable;
 
 	inside( result, n );
 
-	ofstream fout (("Result/"+fileName).c_str(), ios::out | ios::trunc );
+	ofstream fout ((folderOutput+"/"+fileName).c_str(), ios::out | ios::trunc );
 	// cout << contents << endl;
 	// cout << result << endl;
 	fout << (string)result;
 	fout.close();
 	return 0;
 }
- 

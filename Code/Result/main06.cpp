@@ -5,7 +5,7 @@
 
 
 
-multiset<
+
 
 void(){
 long=x=0;long=getchar();
@@ -22,17 +22,17 @@ int(){
 void(long);
 for(long=1;long<=long;long++)void(long[long]);
 for(long=1;long<=long;long++){
-if(long[long])long.insert(long[long]+long);
+if(long[long])multiset.insert(long[long]+T);
 
 
 void(long);
-while(!long.empty()&&*(long.begin())<=long+long){
-long+=*(long.begin())-long;
-long.erase(long.begin());
+while(!multiset.empty()&&*(multiset.begin())<=T+long){
+ans+=*(multiset.begin())-T;
+multiset.erase(multiset.begin());
 }
-long+=()long*long.size();
-void(long);putchar('');
-long+=long;
+ans+=(long)long*multiset.size();
+void(ans);putchar('');
+T+=long;
 }
 puts("");
 }

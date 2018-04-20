@@ -6,8 +6,8 @@
 
 int(){
 std::ios::sync_with_stdio(false);
-multiset<
-multiset<
+
+
 
 cin>>t;
 for(long<t;long++){
@@ -27,7 +27,7 @@ x[long]=p;
 
 
 for(long<t;long++){
-s.insert(a[long]);
+multiset.insert(a[long]);
 
 
 
@@ -35,13 +35,13 @@ s.insert(a[long]);
 
 
 
-for(itr=s.begin();itr!=s.lower_bound(x[long]);++itr)
+for(itr=multiset.begin();itr!=multiset.lower_bound(x[long]);++itr)
 {
 ans+=(*itr-x[long-1]);
 }
-s.erase(s.begin(),s.lower_bound(x[long]));
+multiset.erase(multiset.begin(),multiset.lower_bound(x[long]));
 
-ans+=(x[long]-x[long-1])*s.size();
+ans+=(x[long]-x[long-1])*multiset.size();
 cout<<ans<<"";
 }
 

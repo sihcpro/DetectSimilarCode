@@ -22,9 +22,9 @@ while(long<=long){
 
 
 if(long){
-long-=sum[long-1];
+tmp-=sum[long-1];
 }
-if(long<=vector[long]){
+if(tmp<=vector[long]){
 long=long;
 long=long+1;
 }
@@ -35,11 +35,11 @@ long=long-1;
 if(long!=-1){
 
 if(long){
-long-=sum[long-1];
+tmp-=sum[long-1];
 }
-long=vector[long]-long;
+tmp=vector[long]-tmp;
 if(long!=long-1){
-vector[long+1]+=long;
+vector[long+1]+=tmp;
 }
 vector[long]++;
 vector[long+1]--;

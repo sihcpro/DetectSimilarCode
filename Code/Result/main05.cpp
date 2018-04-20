@@ -27,12 +27,12 @@ vector[long].push_back(long);
 
 for(long<=long;long++){
 
-long+=vector[long].size();
-long+=t[long]*(long-long);
+cnt+=vector[long].size();
+ans+=t[long]*(long-cnt);
 for(long<vector[long].size();long++){
-long+=rest[vector[long][long]];
+ans+=rest[vector[long][long]];
 }
-cout<<long<<'';
+cout<<ans<<'';
 }
 cout<<endl;
 }
