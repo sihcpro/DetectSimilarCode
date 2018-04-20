@@ -19,7 +19,8 @@ int a[100];
 
 
 
-long main()
+
+int main()
 {
 
 
@@ -28,14 +29,14 @@ long main()
  while( test-- ){
   cin >> n;
 
-  long sp;
-  priority_queue<long long, vector<long long>, greater<long long> > h;
-  for(long long (i)= (0); (i) < (n); (i)++){cin >> sp;
+  int sp;
+  priority_queue<long, vector<long>, greater<long> > h;
+  for(long (i)= (0); (i) < (n); (i)++){cin >> sp;
    h.push(sp);
   }
 
   s= 0;
-  while( h.size() > 1 ){
+  while( h.size() > (long)1 ){
    x= h.top(); h.pop();
    y= h.top(); h.pop();
    s+= x+y;

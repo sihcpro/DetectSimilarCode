@@ -77,7 +77,7 @@ int main()
 		}
 
 		s= 0;
-		while( h.size() > 1 ){
+		while( h.size() > (long)1 ){
 			x= h.top(); h.pop();
 			y= h.top(); h.pop();
 			s+= x+y;

@@ -47,4 +47,5 @@ do
 	./preProcess $line
 	# echo "./PreProcess/$line"
 	g++ -E "./PreProcess/$line" > "./PreCompile/$line"
+	./transfer $line
 done
