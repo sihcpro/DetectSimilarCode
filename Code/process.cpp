@@ -125,8 +125,8 @@ int main(int argc, char** argv){
 			// 	break;
 			default: ;
 		}
-		if( n < contents.length ( ) )
-			fout << contents [ n ++ ] ;
+		if( n < contents.length () )
+			fout << contents [ n++ ] ;
 	}
 
 	fout.close();

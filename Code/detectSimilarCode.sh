@@ -54,7 +54,7 @@ checkFolder "Process : " "$process"
 checkFolder "Compile : " "$compile"
 checkFolder "Result  : " "$result"
 
-ls "./Example" > "ls.txt"
+ls $sources > "ls.txt"
 exec < "ls.txt"
 while read line
 do
@@ -63,4 +63,7 @@ do
 	# echo "./PreProcess/$line"
 	g++ -E "./$process/$line" > "./$compile/$line"
 	./transfer $line $compile $transfer
+	python3.6 hashing.py 10 $line
 done
+
+python3.6 checkHash.py "ls.txt" $result
