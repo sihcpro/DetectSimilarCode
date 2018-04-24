@@ -63,7 +63,7 @@ do
 	# echo "./PreProcess/$line"
 	g++ -E "./$process/$line" > "./$compile/$line"
 	./transfer $line $compile $transfer
-	# python3.6 hashing.py 10 $line
+	python3.6 hashing.py 10 $line
 done
 
-# python3.6 checkHash.py "ls.txt" $result
+python3.6 checkHash.py "ls.txt" $result

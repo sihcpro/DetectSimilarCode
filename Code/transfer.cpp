@@ -9,7 +9,7 @@ using namespace std;
 
 #define PB( a ) push_back( (a) )
 
-string fileName = "main02.cpp";
+string fileName = "CFake1.cpp";
 string folderInput = "Compile";
 string folderOutput= "Transfer";
 string contents= "";
@@ -332,7 +332,7 @@ void inside(string &result, int &n){
 		// cout << n << " [" << contents[n] << "] is ";
 		char c= tolower(contents[n]);
 		// cout << "[" << c << "]" <<"\n";
-		if( c < 'a' || c > 'z' ){	// symbol
+		if( ( c < 'a' || c > 'z' ) && c != '_' ){	// symbol
 			switch( c ){
 				case '#':
 					n+= getLengLine( contents, n)+1;
@@ -377,8 +377,8 @@ void inside(string &result, int &n){
 					continue;
 				case '\n':
 					line++;
-					// n++;
-					// continue;
+					n++;
+					continue;
 				default: 
 					// cout << contents[n] << endl;
 					result.PB(contents[n]);
