@@ -9,7 +9,7 @@ using namespace std;
 
 #define PB( a ) push_back( (a) )
 
-string fileName = "main09.cpp";
+string fileName = "main02.cpp";
 string folderInput = "Compile";
 string folderOutput= "Transfer";
 string contents= "";
@@ -193,6 +193,8 @@ int findDataType(string &str, int &start_pos, string &s1){
 			else
 				return type;
 		case 2:
+				skipSpace( str, start_pos);
+				start_pos+= getLengInclude(str, start_pos);
 		case 3:
 			return type;			
 	}
@@ -217,16 +219,22 @@ void deleteParenthesis(string &str, int start_pos){
 	}
 }
 string sp;
+string getNameVarSkipSymbol(string &str, int &start_pos){
+	while( getLengNameVar(contents, start_pos) == 0 )
+		start_pos++;
+	sp= getNameVar(contents, start_pos);
+	start_pos+= sp.length();
+	return sp;
+}
 void variableNormal(string &str, int &start_pos, map<string, int> &m, int type){
 	deleteParenthesis(str, start_pos);
+	skipSpace(str, start_pos);
 	while( str[start_pos] != ',' && str[start_pos] != ';' )
 		start_pos++;
 	while( str[start_pos] != ';' ){
-		sp= getNameVar(contents, start_pos);
-		while( sp.length() == 0 )
-			sp= getNameVar(contents, ++start_pos);
+		sp= getNameVarSkipSymbol(contents, start_pos);
 		// cout << sp.length() << endl;
-		start_pos+= sp.length();
+		// start_pos+= sp.length();
 		// cout << "variable = " << sp << "  type = " << data[type] << endl;
 		m[sp]= type;
 		while( str[start_pos] != ',' && str[start_pos] != ';' )
@@ -234,34 +242,62 @@ void variableNormal(string &str, int &start_pos, map<string, int> &m, int type){
 	}
 	start_pos++;
 }
-
+void getVariable(string &str, int &start_pos, map<string, int> &m){
+	while( getLengNameVar(contents, start_pos) == 0 )
+		start_pos++;
+	string s1= getNameVar(contents, start_pos);
+	int type= findDataType( contents, start_pos, s1);
+	sp= getNameVarSkipSymbol(contents, start_pos);
+	// cout << s1 << "(" << data[type] << ")" << " : [" << sp << "]("<<sp.length()<<")\n";
+	m[sp]= type;
+}
 void variableInFunc(string &str, int &start_pos, map<string, int> &m){
+	// We have 2 case: have no variable or more than one
+
 	deleteParenthesis(str, start_pos+1);
-	while( str[start_pos] != ')' ){
-		// Tien xu li
-		while( str[start_pos] != ',' && str[start_pos] != ')' )
-			start_pos++;
-		if( str[start_pos] == ')' )		return;
+	start_pos++;
+	skipSpace(str, start_pos);
+	if( str[start_pos] == ')' )		return;
+
+	getVariable(contents, start_pos, m);
+	while( str[start_pos] != ',' && str[start_pos] != ')' )
 		start_pos++;
 
-		sp= getNameVar(contents, start_pos);
-		while( sp.length() == 0 )
-			sp= getNameVar(contents, ++start_pos);
-		int type= findDataType( contents, start_pos, sp);
-		// start_pos+= data[type].length();
 
-		if( type/ 10 == 2 ){
-			skipSpace( contents, start_pos);
-			start_pos+= getLengInclude(contents, start_pos);
-		}
-		sp= getNameVar(contents, start_pos);
-		while( sp.length() == 0 )
-			sp= getNameVar(contents, ++start_pos);
-		// cout << sp.length() << endl;
-		start_pos+= sp.length();
+
+	while( str[start_pos] != ')' ){
+		start_pos++;
+		// Tien xu li
+		// sp= getNameVar(contents, start_pos);
+		// cout << " now in fuct has sp = " << sp << " at " << start_pos<< endl;
+		// if( sp.length() == 0 ){
+		// 	while( str[start_pos] != ',' && str[start_pos] != ')' )
+		// 		start_pos++;
+		// 	if( str[start_pos] == ')' )		return;
+		// 	// if( start_pos ==  )
+		// 	start_pos++;
+
+		// 	sp= getNameVar(contents, start_pos);
+		// 	while( sp.length() == 0 )
+		// 		sp= getNameVar(contents, ++start_pos);
+		// // }
+
+		// int type= findDataType( contents, start_pos, sp);
+		// // start_pos+= data[type].length();
+
+		// if( type/ 10 == 2 ){
+		// 	skipSpace( contents, start_pos);
+		// 	start_pos+= getLengInclude(contents, start_pos);
+		// }
+		// sp= getNameVar(contents, start_pos);
+		// while( sp.length() == 0 )
+		// 	sp= getNameVar(contents, ++start_pos);
+		// // cout << sp.length() << endl;
+		// start_pos+= sp.length();
 		// cout << "variable = " << sp << "  type = " << data[type] << endl;
-		m[sp]= type;
-		while( str[start_pos] != ',' && str[start_pos] != ';' )
+		// m[sp]= type;
+		getVariable(contents, start_pos, m);
+		while( str[start_pos] != ',' && str[start_pos] != ')' )
 			start_pos++;
 	}
 }
@@ -295,8 +331,8 @@ void inside(string &result, int &n){
 			break;
 		// cout << n << " [" << contents[n] << "] is ";
 		char c= tolower(contents[n]);
+		// cout << "[" << c << "]" <<"\n";
 		if( c < 'a' || c > 'z' ){	// symbol
-			// cout << "symbol\n";
 			switch( c ){
 				case '#':
 					n+= getLengLine( contents, n)+1;
@@ -327,10 +363,22 @@ void inside(string &result, int &n){
 					deep--;
 					// cout << "I'm out\n";
 					return;
+				case '"':
+					result.PB(contents[n++]);
+					while( contents[n] != '"' )
+						result.PB( tolower(contents[n++]) );
+					result.PB(contents[n++]);
+					continue;
+				case '\'':
+					result.PB(contents[n++]);
+					while( contents[n] != '\'' )
+						result.PB( tolower(contents[n++]) );
+					result.PB(contents[n++]);
+					continue;
 				case '\n':
 					line++;
-					n++;
-					continue;
+					// n++;
+					// continue;
 				default: 
 					// cout << contents[n] << endl;
 					result.PB(contents[n]);
@@ -347,10 +395,10 @@ void inside(string &result, int &n){
 				// cout << type << " = " + data[type] << endl;
 				// n+= data[type].length();
 
-				if( type/ 10 == 2 ){
-					skipSpace( contents, n);
-					n+= getLengInclude(contents, n);
-				}
+				// if( type/ 10 == 2 ){
+				// 	skipSpace( contents, n);
+				// 	n+= getLengInclude(contents, n);
+				// }
 				s2= getNameVar(contents, n);
 				
 				while( s2.length() == 0 ){
@@ -374,6 +422,7 @@ void inside(string &result, int &n){
 				}
 				else if( contents[n] == '(' ){
 					result+= s1+'(';
+					// cout << "--------------------\n";
 					variableInFunc( contents, n, variable);
 				}
 				else{
@@ -400,7 +449,7 @@ void inside(string &result, int &n){
 				n++;
 			}
 		}
-		// cout << " n= " << n << " line= " << line << "  deep = " << deep << endl;
+		// cout << s1 << " n= " << n << " line= " << line << "  deep = " << deep << endl;
 
 	}
 }
@@ -420,6 +469,8 @@ int main(int argc, char** argv){
 	getContent();
 	initTypeData();
 
+	for(int i, j;false;);
+
 	string result= "";
 	int n= 0, bracket= 0, type;
 	map<string, string> variable;
@@ -428,6 +479,7 @@ int main(int argc, char** argv){
 
 	ofstream fout ((folderOutput+"/"+fileName).c_str(), ios::out | ios::trunc );
 	// cout << contents << endl;
+	// cout << "-----------------------------------------------------------------------\n";
 	// cout << result << endl;
 	fout << (string)result;
 	fout.close();
