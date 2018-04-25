@@ -43,7 +43,7 @@ m= space**(hashLength-1)
 
 # print(s)
 # print("------------------------")
-hashing= {}
+hashing= [s]
 for i in range( hashLength, len( contents ) ):
 	# print( contents[i-hashLength], contents[i-hashLength] * m );
 	# print( s );
@@ -51,10 +51,7 @@ for i in range( hashLength, len( contents ) ):
 	# print( s );
 	s= s*space + contents[i]
 	# z= input()
-	if s in hashing:
-		hashing[s]+= 1
-	else:
-		hashing[s]= 1
+	hashing.append(s)
 
 # for i,j in hashing.items():
 # 	print( i, j)
