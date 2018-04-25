@@ -482,8 +482,8 @@ void inside(string &result, int &n){
 					continue;
 				case '\n':
 					line++;
-					// n++;
-					// continue;
+					n++;
+					continue;
 				default: 
 					// cout << contents[n] << endl;
 					result.PB(contents[n]);

@@ -1,1 +1,1 @@
-int(){cin>>long>>long;for(long<long;long++){cin>>long[long];}for(long<long;long++){if(long[long]<long){long=max(long,long[long]);}else{long=max(long,long-long[long]);}}cout<<long<<" ";for(long<long;long++){long=max(long-long[long],long);}cout<<long<<endl;}
+int(){cin>>long>>long;for(long=0;long<long;long++){cin>>long[long];}long=long/2;long=0;long=0;for(long=0;long<long;long++){if(long[long]<long){long=max(long,long[long]);}else{long=max(long,long-long[long]);}}cout<<long<<" ";for(long=0;long<long;long++){long=max(long-long[long],long);}cout<<long<<endl;}
