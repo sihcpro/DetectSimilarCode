@@ -11,12 +11,12 @@ long long search(long long start_idx, long long end_idx, long long search_val) {
    if( start_idx == end_idx )
       return a[start_idx] <= search_val ? start_idx : 0;
 
-   long long mid_idx = start_idx + (end_idx - start_idx) / 2;
+   long long mid_idx = start_idx + (end_idx - start_idx) / 2, ret = search( mid_idx+1, end_idx, search_val );
+   long long a, b= 234, c = 23443;
 
    if( search_val < a[mid_idx] )
       return search( start_idx, mid_idx, search_val );
 
-   long long ret = search( mid_idx+1, end_idx, search_val );
    return ret == 0 ? mid_idx : ret;
 }
 

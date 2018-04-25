@@ -9,13 +9,15 @@ using namespace std;
 
 #define PB( a ) push_back( (a) )
 
-string fileName = "CFake1.cpp";
+string fileName = "C.cpp";
 string folderInput = "Compile";
 string folderOutput= "Transfer";
 string contents= "";
 
 map<string, int> typeData;
+vector< map< string, int> > vec;
 string data[35];
+
 void initTypeData(){
 	typeData["const"]	= 1;
 	typeData["static"]	= 2;
@@ -55,6 +57,10 @@ void initTypeData(){
 	data[12]= "long";
 }
 
+
+bool checkChar(char &c){ 
+	return ( ( c < 'a' || c > 'z' ) && c != '_' );
+}
 
 void getContent(){
 	string line;
@@ -202,6 +208,28 @@ int findDataType(string &str, int &start_pos, string &s1){
 
 
 
+
+int skipTypeCasting(string &str, int start_pos){
+	int i= start_pos+1;
+	skipSpace( str, i);
+	string s1= getNameVar( str, i);
+	if( typeData.find(s1) != typeData.end() ){
+		int type= findDataType( str, i, s1);
+		skipSpace( str, i);
+		if( str[start_pos] == ')' ){
+			cout << "find " << data[type] << " at " << start_pos << endl;
+			return i-start_pos;
+		}
+		else
+			return 0;
+	}
+	else{
+		return 0;
+	}
+}
+
+
+
 void deleteParenthesis(string &str, int start_pos){
 	int deep= 1;
 	while( deep ){
@@ -219,6 +247,22 @@ void deleteParenthesis(string &str, int start_pos){
 	}
 }
 string sp;
+int getIntType(string &str, map<string, int> &m){
+	int tmp= 0;
+	if( m.find( str ) != m.end() )
+		tmp= m[str];
+	else for( int i= vec.size()-1; i >= 0; i--){
+		if( vec[i].find( str ) != vec[i].end() ){
+			tmp= vec[i][str];
+			break;
+		}
+	}
+	return tmp;
+}
+string getType(string str, map<string, int> &m){
+	int type= getIntType( str, m );
+	return (type != 0) ? data[type] : str;
+}
 string getNameVarSkipSymbol(string &str, int &start_pos){
 	while( getLengNameVar(contents, start_pos) == 0 )
 		start_pos++;
@@ -226,21 +270,99 @@ string getNameVarSkipSymbol(string &str, int &start_pos){
 	start_pos+= sp.length();
 	return sp;
 }
-void variableNormal(string &str, int &start_pos, map<string, int> &m, int type){
-	deleteParenthesis(str, start_pos);
+string printCallFunction(string str, int &start_pos, map<string, int> &m){
+	string tmp= "(", s1, s2;
+	while( str[start_pos] != ')' ){
+		char c= tolower( str[start_pos] );
+		if( checkChar(c) ){	// symbol
+			switch(c){
+				case ' ':
+					start_pos++;
+					break;
+				default:
+					tmp.PB( str[start_pos] );
+					start_pos++;
+			}
+		}
+		else{
+			s1= getNameVar( str, start_pos);
+			tmp+= getType(s1, m);
+			// cout << "[" + s1 + "](" << tmp.length() << ")" << endl;
+			start_pos+= s1.length();
+		}
+	}
+	return tmp+")";
+}
+string printCalculationAfterAssign(string &str, int &start_pos, map<string, int> &m, int type){
+	string tmp= "", s1, s2;
+	if( str[start_pos] != '=' )		return "";
+	tmp+= data[type]+'=';
+	start_pos++;
+	int i;
+	while( str[start_pos] != ',' && str[start_pos] != ';' ){
+		char c= tolower( str[start_pos] );
+		if( checkChar(c) ){	// symbol
+			switch(c){
+				case '(':
+					i= skipTypeCasting( str, start_pos);
+					if( i != 0 ){
+						start_pos+= i;
+					}
+					else{
+						tmp.PB('(');
+						start_pos++;
+					}
+					break;
+				case ' ':
+					start_pos++;
+					break;
+				default:
+					tmp.PB( str[start_pos] );
+					start_pos++;
+			}
+		}
+		else{
+			s1= getNameVar( str, start_pos);
+			start_pos+= s1.length();
+
+			int type= getIntType(s1, m);
+			if( type != 0 ){
+				tmp+= data[type];
+				// int i= start_pos;
+				skipSpace(str, start_pos);
+				if( str[start_pos] == '(' )
+					tmp+= printCallFunction(str, start_pos, m);
+			}
+			else
+				tmp+= s1;
+			// cout << "[" + s1 + "](" << tmp.length() << ")" << endl;
+		}
+	}
+	return tmp+";";
+}
+string variableNormal(string &str, int &start_pos, map<string, int> &m, int type){
+	string tmp= "";
+	// deleteParenthesis(str, start_pos);
 	skipSpace(str, start_pos);
+
+	if( str[start_pos] == '=' )
+		tmp+= printCalculationAfterAssign( str, start_pos, m, type);
 	while( str[start_pos] != ',' && str[start_pos] != ';' )
 		start_pos++;
 	while( str[start_pos] != ';' ){
-		sp= getNameVarSkipSymbol(contents, start_pos);
+		sp= getNameVarSkipSymbol(str, start_pos);
 		// cout << sp.length() << endl;
 		// start_pos+= sp.length();
 		// cout << "variable = " << sp << "  type = " << data[type] << endl;
 		m[sp]= type;
+		skipSpace(str, start_pos);
+		if( str[start_pos] == '=' )
+			tmp+= printCalculationAfterAssign( str, start_pos, m, type);
 		while( str[start_pos] != ',' && str[start_pos] != ';' )
 			start_pos++;
 	}
 	start_pos++;
+	return tmp;
 }
 void getVariable(string &str, int &start_pos, map<string, int> &m){
 	while( getLengNameVar(contents, start_pos) == 0 )
@@ -263,39 +385,9 @@ void variableInFunc(string &str, int &start_pos, map<string, int> &m){
 	while( str[start_pos] != ',' && str[start_pos] != ')' )
 		start_pos++;
 
-
-
 	while( str[start_pos] != ')' ){
 		start_pos++;
-		// Tien xu li
-		// sp= getNameVar(contents, start_pos);
-		// cout << " now in fuct has sp = " << sp << " at " << start_pos<< endl;
-		// if( sp.length() == 0 ){
-		// 	while( str[start_pos] != ',' && str[start_pos] != ')' )
-		// 		start_pos++;
-		// 	if( str[start_pos] == ')' )		return;
-		// 	// if( start_pos ==  )
-		// 	start_pos++;
 
-		// 	sp= getNameVar(contents, start_pos);
-		// 	while( sp.length() == 0 )
-		// 		sp= getNameVar(contents, ++start_pos);
-		// // }
-
-		// int type= findDataType( contents, start_pos, sp);
-		// // start_pos+= data[type].length();
-
-		// if( type/ 10 == 2 ){
-		// 	skipSpace( contents, start_pos);
-		// 	start_pos+= getLengInclude(contents, start_pos);
-		// }
-		// sp= getNameVar(contents, start_pos);
-		// while( sp.length() == 0 )
-		// 	sp= getNameVar(contents, ++start_pos);
-		// // cout << sp.length() << endl;
-		// start_pos+= sp.length();
-		// cout << "variable = " << sp << "  type = " << data[type] << endl;
-		// m[sp]= type;
 		getVariable(contents, start_pos, m);
 		while( str[start_pos] != ',' && str[start_pos] != ')' )
 			start_pos++;
@@ -308,7 +400,9 @@ void variableInFunc(string &str, int &start_pos, map<string, int> &m){
 
 
 
-vector< map< string, int> > vec;
+
+
+
 int line= 1, deep= 0;
 bool error= false;
 
@@ -332,7 +426,8 @@ void inside(string &result, int &n){
 		// cout << n << " [" << contents[n] << "] is ";
 		char c= tolower(contents[n]);
 		// cout << "[" << c << "]" <<"\n";
-		if( ( c < 'a' || c > 'z' ) && c != '_' ){	// symbol
+		int i;
+		if( checkChar(c) ){	// symbol
 			switch( c ){
 				case '#':
 					n+= getLengLine( contents, n)+1;
@@ -350,6 +445,16 @@ void inside(string &result, int &n){
 				// 		n+= 2;
 				// 	}
 				// 	continue;
+				case '(':
+					i= skipTypeCasting( contents, n);
+					if( i != 0 ){
+						n+= i;
+					}
+					else{
+						result.PB('(');
+						n++;
+					}
+					break;
 				case '{':
 					vec.PB(variable);
 					result.PB(contents[n]);
@@ -377,8 +482,8 @@ void inside(string &result, int &n){
 					continue;
 				case '\n':
 					line++;
-					n++;
-					continue;
+					// n++;
+					// continue;
 				default: 
 					// cout << contents[n] << endl;
 					result.PB(contents[n]);
@@ -426,7 +531,7 @@ void inside(string &result, int &n){
 					variableInFunc( contents, n, variable);
 				}
 				else{
-					variableNormal( contents, n, variable, type );				
+					result+= variableNormal( contents, n, variable, type );				
 				}
 			}
 			else if( s1.length() > 0 ){

@@ -12,12 +12,11 @@ long long _(long long sidx, long long eidx, long long search_val) {
    if( sidx == eidx )
       return ____[sidx] <= search_val ? sidx : 0;
 
-   long long midx = sidx + (eidx - sidx) / 2;
+   long long midx = sidx + (eidx - sidx) / 2, ret = _( midx+1, eidx, search_val );
 
    if( search_val < ____[midx] )
       return _( sidx, midx, search_val );
 
-   long long ret = _( midx+1, eidx, search_val );
    return ret == 0 ? midx : ret;
 }
 
