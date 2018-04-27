@@ -22,3 +22,4 @@ int main()
     cout << mina << " " << maxa;
     return 0;
 }
+18

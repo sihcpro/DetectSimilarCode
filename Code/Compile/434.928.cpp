@@ -29,3 +29,4 @@ int main()
     cout << minn << " " << max(*it1 - 0, max(l - *it1, max(*it2 - 0, l - *it2)));
     return 0;
 }
+37

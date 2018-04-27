@@ -30,3 +30,4 @@ int main()
     cout << max(a[1] - 0, max(l - a[1], max(a[n] - 0, l - a[n])));
     return 0;
 }
+32

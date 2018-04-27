@@ -23,3 +23,4 @@ int main(){
     cout<<max(maxL, n-minR)<<" "<<max(n-a[0], n-a[cnt-1]);
     return 0;
 }
+25

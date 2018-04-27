@@ -82,7 +82,7 @@ int main(int argc, char** argv){
 
 	ofstream fout ((folderOutput+"/"+fileName).c_str(), ios::out | ios::trunc );
 
-	int n= 0;
+	int n= 0, line= 1;
 
 	while( n < contents.length() ){
 		switch( contents[n] ){
@@ -123,12 +123,15 @@ int main(int argc, char** argv){
 			// 		n++;
 			// 	}
 			// 	break;
+			case '\n':
+				line++;
 			default: ;
 		}
 		if( n < contents.length () )
 			fout << contents [ n++ ] ;
 	}
 
+	fout << line;
 	fout.close();
 	return 0;
 }

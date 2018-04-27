@@ -2,9 +2,9 @@ import sys
 import pickle
 
 hashLength= 10
-fileName= "main09.cpp"
+fileName= "main08.cpp"
 folderInput = "Transfer"
-folderOutput= "Result"
+folderOutput= "Hash"
 
 if len( sys.argv ) >= 2:
 	hashLength= int( sys.argv[1] )
@@ -18,12 +18,16 @@ if len( sys.argv ) >= 5:
 # print( hashLength, fileName, folderInput, folderOutput)
 
 f = open( folderInput+'/'+fileName, "r" )
-contents = f.readline()
+contents= ""
+for line in f:
+	contents+= line[:-1]
+
+# print( contents )
 f.close()
 
 contents= list( map( ord, contents.upper() ) )
 s= 0
-skip= 32
+skip= 31
 space= 127 - skip - 26
 m= 1
 

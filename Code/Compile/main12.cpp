@@ -40,3 +40,4 @@ int main()
         cout<<d[i]<<" ";
     cout<<endl;
 }
+34

@@ -26,3 +26,4 @@ main()
 	else max=a[n-1];
 	cout<<max;
 }
+28

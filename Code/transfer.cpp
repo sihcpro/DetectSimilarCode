@@ -114,27 +114,27 @@ int getLengSemiColon(string &str, int start_pos){
 }
 string getOnlyString(string &str, int start_pos){
 	char c= tolower( str[start_pos] );
-	string result= "";
+	string tmp= "";
 	while( 'a' <= c && c <= 'z' ){
-		result.PB( str[start_pos++] );
+		tmp.PB( str[start_pos++] );
 		c= tolower( str[start_pos] );
 	}
-	return result;
+	return tmp;
 }
 string getNameVar(string &str, int start_pos){
 	return str.substr(start_pos, getLengNameVar(str, start_pos));
 }
 string getLine(string &str, int start_pos){
-	string result= "";
+	string tmp= "";
 	while( str[start_pos] != '\n' )
-		result.PB(str[start_pos++]);
-	return result;
+		tmp.PB(str[start_pos++]);
+	return tmp;
 }
 string getInBracket(string &str, int start_pos){
-	string result= "";
+	string tmp= "";
 	while( str[start_pos-1] != ')' )
-		result.PB(str[start_pos++]);
-	return result;
+		tmp.PB(str[start_pos++]);
+	return tmp;
 }
 string getSemiColon(string &str, int start_pos){
 	int length= 0;
@@ -143,10 +143,10 @@ string getSemiColon(string &str, int start_pos){
 	return str.substr( start_pos, length);
 }
 string getGroupString(string &str, int start_pos){
-	string result= "";
+	string tmp= "";
 	while( start_pos < str.length() && str[start_pos-1] != ';' && str[start_pos-1] != '{' )
-		result.PB(str[start_pos++]);
-	return result;
+		tmp.PB(str[start_pos++]);
+	return tmp;
 }
 
 void removeNext(string &str, int n, char target){
@@ -406,7 +406,7 @@ void variableInFunc(string &str, int &start_pos, map<string, int> &m){
 int line= 1, deep= 0;
 bool error= false;
 
-void inside(string &result, int &n){
+void inside(string &str, int &n){
 	map<string, int> variable;
 	string s1, s2, s3, s4;
 
@@ -435,13 +435,13 @@ void inside(string &result, int &n){
 					continue;
 				// case ';':
 				// 	n++;
-				// 	result.PB( '\n' );
+				// 	str.PB( '\n' );
 				// 	continue;
 				// case '<':
 				// 	if( contents[n+1] != '<' )
 				// 		n+= getLengUntil( contents, n, '>', '<');
 				// 	else{
-				// 		result+= "<<";
+				// 		str+= "<<";
 				// 		n+= 2;
 				// 	}
 				// 	continue;
@@ -451,42 +451,42 @@ void inside(string &result, int &n){
 						n+= i;
 					}
 					else{
-						result.PB('(');
+						str.PB('(');
 						n++;
 					}
 					break;
 				case '{':
 					vec.PB(variable);
-					result.PB(contents[n]);
+					str.PB(contents[n]);
 					deep++;
-					inside(result, ++n);
+					inside(str, ++n);
 					continue;
 				case '}':
 					// vec.pop_back();
-					result.PB(contents[n]);
+					str.PB(contents[n]);
 					n++;
 					deep--;
 					// cout << "I'm out\n";
 					return;
 				case '"':
-					result.PB(contents[n++]);
+					str.PB(contents[n++]);
 					while( contents[n] != '"' )
-						result.PB( tolower(contents[n++]) );
-					result.PB(contents[n++]);
+						str.PB( tolower(contents[n++]) );
+					str.PB(contents[n++]);
 					continue;
 				case '\'':
-					result.PB(contents[n++]);
+					str.PB(contents[n++]);
 					while( contents[n] != '\'' )
-						result.PB( tolower(contents[n++]) );
-					result.PB(contents[n++]);
+						str.PB( tolower(contents[n++]) );
+					str.PB(contents[n++]);
 					continue;
 				case '\n':
 					line++;
-					n++;
-					continue;
+					// n++;
+					// continue;
 				default: 
 					// cout << contents[n] << endl;
-					result.PB(contents[n]);
+					str.PB(contents[n]);
 					n++;
 					continue;
 			}
@@ -522,16 +522,16 @@ void inside(string &result, int &n){
 				skipSpace(contents, n);
 				// cout << "hhhhhhhhhhhhhhhherer = " << contents[n] << endl;
 				if( contents[n] == ')' ){
-					result+= s2;
+					str+= s2;
 					continue;
 				}
 				else if( contents[n] == '(' ){
-					result+= s1+'(';
+					str+= s1+'(';
 					// cout << "--------------------\n";
 					variableInFunc( contents, n, variable);
 				}
 				else{
-					result+= variableNormal( contents, n, variable, type );				
+					str+= variableNormal( contents, n, variable, type );				
 				}
 			}
 			else if( s1.length() > 0 ){
@@ -544,8 +544,8 @@ void inside(string &result, int &n){
 						break;
 					}
 				}
-				result = result + s2;
-				// cout << "[" + s1 + "](" << result.length() << ")" << endl;
+				str = str + s2;
+				// cout << "[" + s1 + "](" << str.length() << ")" << endl;
 				n+= s1.length();
 			}
 

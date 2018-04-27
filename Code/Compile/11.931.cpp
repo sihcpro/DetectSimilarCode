@@ -30,3 +30,11 @@ int main ()
     }
     cout << resmin << " " << resmax;
 }
+
+
+
+
+
+
+
+33

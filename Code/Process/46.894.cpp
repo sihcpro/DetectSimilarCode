@@ -29,3 +29,4 @@ int main()
 	cout<<max;
 	return 1;
 }
+31

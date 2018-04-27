@@ -28,3 +28,4 @@ int main(){
  }
  cout<<mink<<" "<<maxk;
 }
+24

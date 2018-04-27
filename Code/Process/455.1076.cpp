@@ -27,3 +27,4 @@ int main()
     }
     cout << min2 << endl;
 }
+29

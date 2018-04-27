@@ -18,3 +18,4 @@ int main(){
 	cout<<min<<" "<<max;
 }
 
+20

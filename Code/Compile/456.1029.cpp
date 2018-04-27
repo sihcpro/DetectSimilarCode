@@ -22,3 +22,4 @@ int main(){
     cout<<min(n-maxL, n-minR)<<" "<<max(n-minL, n-maxR)<<endl;
     return 0;
 }
+18

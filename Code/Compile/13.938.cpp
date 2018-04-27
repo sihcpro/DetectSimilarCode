@@ -28,3 +28,4 @@ int main()
  cout<<resmin<<" "<<resmax;
  return 0;
 }
+39

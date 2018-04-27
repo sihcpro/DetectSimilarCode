@@ -3,13 +3,22 @@ from operator import itemgetter
 import sys
 import pickle
 
-listFileName = 'ls.txt'
-folderInput = 'Result'
+listFileName= 'ls2.txt'
+noisyLength = 5
+folderInput = 'Hash'
+folderOutput= 'Result'
+folderTransfer= 'Transfer'
 
-if len( sys.argv ) >= 2:
-	listFileName = sys.argv[1]
-if len( sys.argv ) >= 3:
-	folderInput = sys.argv[2]
+if len( sys.argv ) > 1:
+	listFileName= sys.argv[1]
+if len( sys.argv ) > 2:
+	noisyLength = int( sys.argv[2] )
+if len( sys.argv ) > 3:
+	folderInput = sys.argv[3]
+if len( sys.argv ) > 4:
+	folderOutput= sys.argv[4]
+if len( sys.argv ) > 5:
+	folderTransfer= sys.argv[5]
 
 def longest_common_substring(text):
     """Get the longest common substrings and their positions.
@@ -35,7 +44,7 @@ def longest_common_substring(text):
             result[substring].append(j2)
     return dict((k, sorted(v)) for k, v in result.items())
 
-def suffix_array(text, _step=16):
+def suffix_array(text, _step=2):
     """Analyze all common strings in the text.
 
     Short substrings of the length _step a are first pre-sorted. The are the 
@@ -154,6 +163,8 @@ def winnow(w, hashing):
 	return fingerprint, fingerprintVT
 
 arrayHashing= []
+arrayHashingLen = []
+arrayHashingFingerprintVT = []
 arrayFileName= []
 
 with open( listFileName ) as f:
@@ -164,11 +175,19 @@ with open( listFileName ) as f:
 for fileName in arrayFileName:
 	# line = f.readline()
 	hashingA = pickle.load( open( folderInput+'/'+fileName, 'rb' ) )
+	lenAA = len(hashingA)
+
+	hashingA, fingerprintVTA = winnow(5, hashingA)
 	lenA = len( hashingA )
-	hashingA.append(0);
+
+	hashingA.append(-1)
+	samefile= []
 	for p in range( len( arrayHashing ) ):
 		hashingB = arrayHashing[p].copy()
 		lenB = len( hashingB )
+		hashingB.append(-2)
+		lenBB = arrayHashingLen[p]
+		fingerprintVTB = arrayHashingFingerprintVT[p].copy()
 
 		bothHashing = hashingA + hashingB
 		lenBoth = len(bothHashing)
@@ -182,7 +201,7 @@ for fileName in arrayFileName:
 		chepB = []
 
 		for i in range(2, lenBoth ):
-			if (lcp[i] >= 5):
+			if (lcp[i] >= 2):
 				if (l == 0): 
 					l = i-1
 					r = i
@@ -200,10 +219,12 @@ for fileName in arrayFileName:
 						yesB = True
 				if (yesA and yesB) :
 					for j in range(l, r+1) : 
-						if (sa[j] < lenA) : 
-							chepA.append(sa[j])
+						if (sa[j] < lenA ) :
+							if (sa[j] + 1 < lenA) :  
+								chepA.append((fingerprintVTA[sa[j]], fingerprintVTA[sa[j]+1]))
 						else : 
-							chepB.append(sa[j] - 1 - lenA)
+							if (sa[j] - lenA < lenB) :
+								chepB.append((fingerprintVTB[sa[j] - 1 - lenA], fingerprintVTB[sa[j] - lenA]))
 				l = 0
 				r = 0
 
@@ -217,52 +238,123 @@ for fileName in arrayFileName:
 					yesB = True
 			if (yesA and yesB) :
 				for j in range(l, r+1) : 
-					if (sa[j] < lenA) : 
-						chepA.append(sa[j])
+					if (sa[j] < lenA ) :
+						if (sa[j] + 1 < lenA) :  
+							chepA.append((fingerprintVTA[sa[j]], fingerprintVTA[sa[j]+1]))
 					else : 
-						chepB.append(sa[j] - 1 - lenA)
+						if (sa[j] - lenA < lenB) :
+							chepB.append((fingerprintVTB[sa[j] - 1 - lenA], fingerprintVTB[sa[j] - lenA]))
 
-		rA = [0 for i in range(lenA)]
-		rB = [0 for i in range(lenB - 1)]
+		rA = [0 for i in range(lenAA)]
+		rB = [0 for i in range(lenBB)]
 
 		for i in range( len(chepA) ):
-			# print(chepA[i])
-			for j in range(5):
-				if (chepA[i] + j >= len(rA)): 
-					continue
-				rA[chepA[i]+j] += 1
+			for j in range(chepA[i][0], chepA[i][1]+1):
+				rA[j] += 1
 
 		for i in range( len(chepB) ):
-			for j in range(5):
-				if (chepB[i] + j >= len(rB)): 
-					continue
-				rB[chepB[i]+j] += 1
+			for j in range(chepB[i][0], chepB[i][1]+1):
+				rB[j] += 1
 
 		g = 0
 		h = 0
 		for i in range( len(rA) ):
 			if (rA[i] >= 1): 
-				# print(i)
 				g += 1
 
-
 		# print(g)
-		# print(len(rA))
 
+
+		pos= [ i for i in range(len(rB)) ]
 		for i in range( len(rB) ):
-			if (rB[i] >= 1): 
+			if (rB[i] >= 1):
+				# print(i)
 				h += 1
+				for j in range( noisyLength ):
+					if i-j-1 > 0 and rB[i-j-1] >= 1:
+						pos[i]= pos[i-j-1]
+		# print(pos)
+
+
+		ed= len(rB)-noisyLength-1
+		arrayLengthCopy= []
+		while( ed > 0 ):
+			bg= pos[ed]
+			if( ed-bg+1 > noisyLength ):
+				arrayLengthCopy.append( [bg, ed] )
+				ed= bg
+			else:
+				ed-= 1
+
+
+
 
 		percentX= g / len(rA)
 		percentY= h / len(rB)
 
-		if( max( percentX, percentX) >= 0.8 ):
+		if( max( percentX, percentY) > 0.5 ):
 			print( "file %15s has %7s & %7s same file %15s" % ( fileName, str(round(percentX*100, 2))+'%', str(round(percentY*100, 2))+'%', arrayFileName[p] ) )
+			samefile.append( { 'filename': arrayFileName[p], 'percent': round( max( percentX, percentY)*100, 2 ), 'copy': arrayLengthCopy, 'line': []} )
 
 		# print( "lenA = %s | lenB = %s | both = %s" % (lenA, lenB, len( bothHashing ) ) )
-		
+	if len( samefile ) > 0:
+		numLine= 0
+		l= 1
+		for i in samefile:
+			f2 = open( folderTransfer+'/'+i['filename'], 'r' )
 
+			length= 0
+			x= y= 0
+			line= " "
+			for j in reversed( i['copy'] ):
+
+				while( line != '' ):
+					print( "%s %3d %5d %s" % ( 'x', l, length, line ) , end= '')
+					if( length > j[0] ):
+						x= l
+						break
+					line = f2.readline()
+					length+= len(line)-1
+					l+= 1
+				# print( "%s %3d %5d %s" % ( '-', l, length, line ) , end= '')
+				while( line != '' ):
+					print( "%s %3d %5d %s" % ( 'y', l, length, line ) , end= '')
+					if( length > j[1] ):
+						y= l
+						break
+					line = f2.readline()
+					length+= len(line)-1
+					l+= 1
+				print( x, y)
+				i['line'].append( [x,y] )
+
+			contents= []
+			while( line != '' ):
+				line= f2.readline()
+				contents.append( line )
+				l+= 1
+			l-= 1
+			numLine= int( contents[-3] )
+			# print( "normal have ", numLine, " line but in here we have ", l, " line")
+
+
+		l-= 3
+		f = open( folderOutput+'/'+fileName, "w" )
+		f.write( str( len( samefile ) ) + '\n' )
+		for i in samefile:
+			f.write( i['filename'] + ' ' + str( i['percent'] ) + '\n' + str( len( i['copy'] ) ) + '\n'  )
+
+			# for j in reversed( i['copy'] ):
+			# 	f.write( str( j[0] ) + ' ' + str( j[1] ) + '\n' )
+			for j in i['line']:
+				f.write( str( numLine-l+j[0] ) + ' ' + str( numLine-l+j[1] ) + '\n' )
+		f.close()
+
+
+	hashingA = hashingA[:-1]
 	arrayHashing.append( hashingA )
+	arrayHashingLen.append(lenAA)
+	arrayHashingFingerprintVT.append(fingerprintVTA)
 	# print( hashing )
 	# input()
 

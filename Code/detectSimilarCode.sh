@@ -4,9 +4,10 @@ sources="Example"
 process="Process"
 compile="Compile"
 transfer="Transfer"
+hashes="Hash"
 result="Result"
 
-echo "You can give 5 arguments: folder sources, process, compile, transfer, result"
+echo "You can give 6 arguments: folder sources, process, compile, transfer, hashes, result"
 
 # case $# in
 # 1*)
@@ -32,7 +33,11 @@ then
 				transfer=$4
 				if [ $# -ge 5 ]
 				then
-					result=$5
+					hashes=$5
+					if [ $# -ge 6 ]
+					then
+						result=$6
+					fi
 				fi
 			fi
 		fi
@@ -52,6 +57,8 @@ checkFolder () {
 checkFolder "Source  : " "$sources"
 checkFolder "Process : " "$process"
 checkFolder "Compile : " "$compile"
+checkFolder "Transfer: " "$transfer"
+checkFolder "Hash    : " "$hashes"
 checkFolder "Result  : " "$result"
 
 ls $sources > "ls.txt"
@@ -66,4 +73,4 @@ do
 	python3.6 hashing.py 10 $line
 done
 
-python3.6 checkHash.py "ls.txt" $result
+python3.6 checkHash.py "ls.txt" 5 $hashes $result $transfer

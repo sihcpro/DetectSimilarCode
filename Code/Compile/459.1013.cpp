@@ -22,3 +22,4 @@ int main() {
     cout << l/2-minmin << " " << l-minmax;
  return 0;
 }
+18
