@@ -9,7 +9,7 @@ using namespace std;
 
 #define PB( a ) push_back( (a) )
 
-string fileName = "C.cpp";
+string fileName = "13.938.cpp";
 string folderInput = "Compile";
 string folderOutput= "Transfer";
 string contents= "";
@@ -326,15 +326,11 @@ string printCalculationAfterAssign(string &str, int &start_pos, map<string, int>
 			start_pos+= s1.length();
 
 			int type= getIntType(s1, m);
-			if( type != 0 ){
-				tmp+= data[type];
-				// int i= start_pos;
-				skipSpace(str, start_pos);
-				if( str[start_pos] == '(' )
-					tmp+= printCallFunction(str, start_pos, m);
-			}
-			else
-				tmp+= s1;
+			tmp+= ( type != 0 ) ? data[type] : s1;
+
+			skipSpace(str, start_pos);
+			if( str[start_pos] == '(' )
+				tmp+= printCallFunction(str, start_pos, m);
 			// cout << "[" + s1 + "](" << tmp.length() << ")" << endl;
 		}
 	}
@@ -547,6 +543,11 @@ void inside(string &str, int &n){
 				str = str + s2;
 				// cout << "[" + s1 + "](" << str.length() << ")" << endl;
 				n+= s1.length();
+				// skipSpace(contents, n);
+				// if( str[n] == '(' ){
+				// 	str+= s1+'(';
+				// 	variableInFunc( contents, n, variable);
+				// }
 			}
 
 			if( s1.length() == 0 ){

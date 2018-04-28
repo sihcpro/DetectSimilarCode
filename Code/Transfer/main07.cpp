@@ -17,7 +17,7 @@ long[long]=long[long-1]+long[long];
 
 
 for(long=1;long<=long;long++){
-long=upper_bound(long;
+long=upper_bound((long,long+long+1,long[long-1]+long[long]))-long;
 long[long]+=long[long-1]+long[long]-long[long-1];
 priority_queue.push(long);
 

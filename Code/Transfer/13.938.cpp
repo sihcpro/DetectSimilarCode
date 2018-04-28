@@ -15,7 +15,7 @@ long=0;long=0;
 long=max(long-long[1],long[long]);
 for(long=1;long<=long;long++)
 {
-long=min(long-long[long];
+long=min((long-long[long],long[long]));
 long=max(long,long);
 }
 cout<<long<<" "<<long;

@@ -3,7 +3,7 @@
 int(){
 
 scanf("%d %d",&long,&long);
-long=(int*)malloc(long*sizeof(int));
+long=(int*)malloc((long*sizeof(int)));
 for(long=0;long<long;long++){
 scanf("%d",&long[long]);
 }

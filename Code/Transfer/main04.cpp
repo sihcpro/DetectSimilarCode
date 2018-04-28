@@ -1,5 +1,5 @@
 long=1e9+9;
-double=2*acos(0.0);
+double=2*acos((0.0));
 double=1e-9;
 long=-1;
 long=1e5+5;
@@ -19,7 +19,7 @@ for(long=1;long<=long;++long)cin>>long[long];
 for(long=1;long<=long;++long)cin>>long[long],long[long]=long[long];
 for(long=1;long<=long;++long)long[long]+=long[long-1];
 for(long=1;long<=long;++long){
-long=lower_bound(long+1;
+long=lower_bound((long+1,long+long+1,long[long]+long[long-1]))-long;
 ++long[long];
 long[long]+=(long[long]-long[long-1])-long[long];
 }

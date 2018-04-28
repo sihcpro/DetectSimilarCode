@@ -24,7 +24,7 @@ long=long;
 rest[long]=vector[long]-vector[long-1]+vector[long-1];
 vector[long].push_back(long);
 }
-long=vector[0].size();
+long=vector[0].size(());
 for(long=1;long<=;long++){
 long=0;
 long+=vector[long].size();

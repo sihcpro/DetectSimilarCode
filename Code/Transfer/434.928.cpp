@@ -16,10 +16,10 @@ set.insert(long);
 }
 
 
-long=max(long-*it1;
+long=max((long-*it1,*it2-0));
 it1=set.lower_bound(0);
-long=set.lower_bound(long);
-cout<<long<<" "<<max(*it1-0,max(long-*it1,max(*long-0,long-*long)));
+it2=set.lower_bound(long);
+cout<<long<<" "<<max(*it1-0,max(long-*it1,max(*it2-0,long-*it2)));
 return0;
 }
 37
