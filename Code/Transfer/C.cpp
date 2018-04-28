@@ -32,3 +32,5 @@ if(long==0)cout<<-1;
 elsecout<<fixed<<setprecision(9)<<double;
 }
 
+34
+

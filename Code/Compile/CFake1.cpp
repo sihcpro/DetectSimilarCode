@@ -44,3 +44,6 @@ int main(){
  if(________ == 0) cout << -1;
  else cout << fixed << setprecision(9) << mx;
 }
+
+
+42

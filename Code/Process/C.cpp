@@ -32,3 +32,4 @@ int main(){
 	else cout << fixed << setprecision(9) << mx;
 }
 
+34

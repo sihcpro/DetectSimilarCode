@@ -304,12 +304,12 @@ for fileName in arrayFileName:
 			f2 = open( folderTransfer+'/'+i['filename'], 'r' )
 
 			length= 0
-			x= y= 0
+			x= y= 1
 			line= " "
 			for j in reversed( i['copy'] ):
 
 				while( line != '' ):
-					print( "%s %3d %5d %s" % ( 'x', l, length, line ) , end= '')
+					# print( "%s %3d %5d %s" % ( 'x', l, length, line ) , end= '')
 					if( length > j[0] ):
 						x= l
 						break
@@ -318,15 +318,15 @@ for fileName in arrayFileName:
 					l+= 1
 				# print( "%s %3d %5d %s" % ( '-', l, length, line ) , end= '')
 				while( line != '' ):
-					print( "%s %3d %5d %s" % ( 'y', l, length, line ) , end= '')
+					# print( "%s %3d %5d %s" % ( 'y', l, length, line ) , end= '')
 					if( length > j[1] ):
 						y= l
 						break
 					line = f2.readline()
 					length+= len(line)-1
 					l+= 1
-				print( x, y)
-				i['line'].append( [x,y] )
+				# print( "---------------------------------", x, y)
+				i['line'].append( [ x, y] )
 
 			contents= []
 			while( line != '' ):
@@ -336,7 +336,9 @@ for fileName in arrayFileName:
 			l-= 1
 			numLine= int( contents[-3] )
 			# print( "normal have ", numLine, " line but in here we have ", l, " line")
-
+			for j in range( len( i['line'] ) ):
+				i['line'][j][0]+= numLine-l
+				i['line'][j][1]+= numLine-l
 
 		l-= 3
 		f = open( folderOutput+'/'+fileName, "w" )
@@ -347,7 +349,7 @@ for fileName in arrayFileName:
 			# for j in reversed( i['copy'] ):
 			# 	f.write( str( j[0] ) + ' ' + str( j[1] ) + '\n' )
 			for j in i['line']:
-				f.write( str( numLine-l+j[0] ) + ' ' + str( numLine-l+j[1] ) + '\n' )
+				f.write( str( j[0] ) + ' ' + str( j[1] ) + '\n' )
 		f.close()
 
 
