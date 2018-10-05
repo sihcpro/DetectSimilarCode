@@ -27,4 +27,33 @@ Hằng số t và k <= t là được chọn bởi người dùng. Chúng tôi t
 
 Những số liệu 2(a)-(d) được chép lại từ số liệu 1 để tiện và cho thấy một dãy băm của 5-grams có nguồn gốc từ vài đoạn mẫu.
 
-Cho 1 chuỗi các băm h1..hn, nếu n > (t-k), thì ít nhất 1 trong hi phải được chọn để đảm bảo phát hiện cho tất cả những chuỗi khớp có độ dài ít nhất là t.  
+Cho 1 chuỗi các băm h1..hn, nếu n > (t-k), thì ít nhất 1 trong hi phải được chọn để đảm bảo phát hiện cho tất cả những chuỗi khớp có độ dài ít nhất là t. Từ đó cho thấy cách tiếp cận đơn gỉan sau. cho kích thước khung( window size) bằng w = t-k+1. Xem xét chuỗi băm h1h2...hn mà nó đại diện cho 1 văn bản. Tại mỗi vị trí 1 <= i <= n-w+1 trong chuỗi xác định 1 khung của các hash hi...h(i+w-1). Để duy trì sự đảm bảo thì nó cần chọn gía trị 1 hash từ mọi khung để trở thành fingerprint cho đoạn văn. (Điều này cũng đủ, xem ở Lemma 1). Trong thực tế, chúng ta đã tìm ra những chiến lược là việc tốt sau.
+
+DEFINITION 1 (WINNOWING). Trong mỗi khung chọn gía trị băm nhỏ nhất. Nếu có nhiều hơn 1 băm với gía trị nhỏ nhất, chọn cái bên phải nhất. Giờ lưu tất cả những băm đã được chọn như là những fingerprints của văn bản.
+
+Số liệu 2(e) cho những khung có độ dài bằng 4 của chuỗi các băm từ số liệu 2(d). Mỗi băm mà được chọn thì được biểu diễn in đậm( nhưng chỉ 1 lần, trong khung đầu tiên chọn băm đó). Trực giác đằng sau việc chọn băm nhỏ nhất là cái băm nhỏ nhất trong 1 khung rất giống với băm nhỏ nhất trong khung bên cạnh, bởi vì những tỉ lệ mà số ngẫu nhiên w nhỏ nhất là nhỏ hơn một số ngẫu nhiên được thêm vào( since the odds are that the minimum of w random numbers is smaller than one additional random number). Do đó, nhiều những khung chồng lên nhau chọn cùng một băm, và số lưọng fingerprint đã chọn thì xem ra nhỏ hơn số lượng số lượng khung trong khi vẫn chứa gía trị đảm bảo. Số liệu 2(f) cho thấy tập fingerprint đã chọn bởi winnowing trong ví dụ.
+
+Trong nhiều ứng dụng nó có ích trong việc lưu lại không chỉ fingerprint của 1 văn bản mà còn vị trí của các fingerprint trong văn bản. Ví dụ, chúng ta cần vị trí của thông tin để thể hiện độ khớp nhau của xâu con trong 1 giao diện người dùng. Một sự phát triển hiệu quả của winnowing  cũng cần gĩư lại vị trí của fingerprint đưọc chọn gần nhất. Số liệu 2(g) cho thấy tập của những cặp ơfingerprint, vị trí] như ví dụ( vị trí đầu được tính từ 0). Để tránh làm phức tạp của việc đánh chỉ mục cho tất băm với vị trí của nó trong chuỗi băm tổng thể với k-grams trong 1 văn bản, chúng tôi bỏ qua hầu hết sự liên quan đến vị trí của k-grams trong văn bản trong bài thuyết trình của chúng tôi.
+
+
+3.1 Expected Density ( Mật độ kì vọng)
+
+Nhắc lại rằng mật độ kì vọng của một fingerprinting algorithm là phần kì vọng của fingerprints được chọn trong số tất cả các gía trị bảng ghi đã được tính, cho gía trị vào random(Section 1). Chúng ta bắt đầu phân tích tỉ trọng của winnowing ngay bây giờ, điều đó sữ đưa ra sự cân bằng giữa ngưỡng đảm bảo và số lượng vân tay yêu cầu.
+
+Xem xét chương trình C mà ánh xạ vị trí mỗi vân tay được chọn đến vị trí đầu( bên trái cùng) cửa sổ, cái cửa sổ mà đã chọn trong tất cả cửa sổ trong đọa văn bản( Consider the function C that maps the position of each selected fingerprint to the position of the first (leftmost) window that selected it in the sequence of all windows for a documen ). Chúng ta nói chúng ta đang thay lượng lưu lại dấu vân tay cho cửa sổ được chỉ định. Chương trình thay đổi là hàm tăng tuyến tính - nó là, nếu p và q là vị trí của 2 vân tay được chọn và p < q thì C(p) < C(p).
+
+Để chứng minh điều này, gỉa thuyết những vân tay được chọn tại những vị trí phân biệt p và q với p < q nhưng C(p) > C(q). Thì cả 2 vị trí p và q là trong cùng khung. Cho hp là băm tại vị trí p và cho hq là băm tại vị trí q. Có 2 khả năng xảy ra: nếu hp == hq thì, vì p < q, khung C(p) không đưọc thay đổi với p và cũng không với q, vì C(q) < C(p). Nếu hp != hq thì một trong C(p) hoặc C(q) không được đổi. Cả 2 đều mâu thuẫn với gỉa thuyết. Chúng ta khẳng định rằng hàm thay đổi là hàm tăng tuyến tính.
+
+Để tính tiếp tục xử lí sâu hơn nhắc cho chúng ta là chuỗi các băm mà chúng ta đang winnowing là ngẫu nhiên. Chúng ta gỉa thuyết là phần không gian của các gía trị băm là rất lớn vì thế chúng ta có hể bỏ qua một cách an toàn khả năng rằng nó có 1 sự hạn chế cho gía trị nhỏ nhất với bất kì khung nhỏ nào. Chúng tôi đã minh họa rõ ràng gỉa thuyết này ở chương 5.
+
+Cân nhắc 1 biến random được chỉ định Xi mà là một nếu khung Wi thứ i được thay đổi. Xem xét khung liền kề phía bên trái Wi-1. Khoảng lặp lại ngoại trừ vị trí bên trái cùng và phải cùng. Sự liên tiếp của chúng là 1 khoảng có độ dài w+1. Xem xét vị trí p chứa băm nhỏ nhất trong khoảng liên tiếp đó. Bất cứ khungnaof mà nó chứa p chọn hp như là một dấu vân tay. Ta thấy có 3 trường hợp:
+
+1. Nếu p = i-1, vị trí bên trái cùng trong chuỗi, thì Wi-1 chọn nhó. Bởi vì p không thuộc Wi, chúng ta biết rằng Wi phải chọn như là 1 băm trong vị trí khác, q. Băm này được thay đổi sang Wi vì Wi  chọn nó, Wi-1 đã không chọn nó, và chương trình đổi là hàm tuyến tính tăng dần. Nên trong trường hợp này, Xi = 1.
+
+2.Nếu p=i+w-1, vị trí bên phải cùng trong chuỗi liên tiếp, thì Wi  chọn not. Wi phải được chọn cho nó. vì Wi cũng là vị trí bên trái cùng để chứa p. 1 lần nữa, Xi = 1.
+
+3. Nếu p là một trong các điểm còn lại trong chuỗi liên tục, cả Wi-1 và Wi chọn nó. Không quan trọng ai được thay đổi hành nó, nó sẽ không là Wi , vì Wi-1 là liên tục bên trái và cũng chọn nó. Nên trong trường hợp này, Xi = 0.
+
+2 trưòng hợp đầu tiên
+
+

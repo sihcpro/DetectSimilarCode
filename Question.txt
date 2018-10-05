@@ -1,0 +1,8 @@
+1. Nếu một người thay 1 hàm bằng #define ví dụ như for thành rep thì có xem như là copy không ạ để em áp dụng luôn compile vào code ạ?
+2. Nếu sử dụng typedef cũng sinh ra hiện tượng như vậy ạ.
+3. 1 hàm khi được gọi ở ngoài sẽ khác với gọi ở trong, em sẽ làm được nhưng sẽ hơi phức tạp nhưng có nên phân biệt hay cứ tính là giống nhau ạ?
+4. Nếu khai báo biến là 1 điều bình thường em nghĩ là nên xóa nó luôn, không tính vào code, như vậy sẽ đỡ phải xét trường hợp 1 thanh niên nào đó tạo ra 1 đống biến để qua mắt.
+
+Theo ý kiến chủ quan của em thì thường copy code hay đổi biến, đảo thứ tự dòng của code, thay for thành while và duỗi câu lệnh từ 1 vòng for ra thành 2. Nên việc define và typedef có thể bỏ qua và xem như là 1 kiểu dữ liệu T. Còn hàm thì gọi ngoài hay trong cũng như nhau để đơn giản cho việc xử lí. Còn xóa biến thì em thấy là không cần vì dù sao mình cũng đổi tên biến thành 1 chữ cái nào đó (V).
+
+Em cảm ơn thầy ạ.
