@@ -1,0 +1,10 @@
+﻿1. GIỚI THIỆU
+Tài liệu kỹ thuật số rất dễ bị sao chép. Có nhiều nguyên nhân khác nhau dẫn đến việc các tài liệu này bị sao chép hoàn toàn hoặc một phần. Một số người trích dẫn từ email và các bài viết của người khác. Cộng tác viên tạo ra nhiều phiên bản của các tài liệu, mỗi phiên bản đều liên quan chặt chẽ đến người tiền nhiệm trước đó. Các trang Web quan trọng được nhân đôi. Nhiều sinh viên ăn cắp bài tập về nhà từ trang web. Nhiều tác giả của các giấy tờ hội nghị tham gia vào một hội nghị tương tự  và việc sử dụng lại văn bản được xã hội chấp nhận hơn. Nhiều doanh nghiệp, đặc biệt là trong ngành công nghiệp phần mềm và giải trí, hoạt động dựa trên chi phí cho mỗi bản sao được bán.
+So sánh toàn bộ checksums tài liệu là cách đơn giản và đủ để phát hiện chính xác các bản sao; tuy nhiên, để phát hiện một phần bản sao cần phải khôn khéo hơn. Bởi vì nhiều ứng dụng tiềm năng của nó, vấn đề thứ hai này cần phải được chú ý đặc biệt.
+Hầu hết các kỹ thuật trước đây để phát hiện một phần bản sao, mà chúng tôi sẽ thảo luận chi tiết hơn trong Phần 2, sử dụng ý tưởng sau đây.
+Một k-gram là một chuỗi con liền kề có độ dài k. Chia tài liệu thành k-gram, trong đó k là một tham số được chọn bởi người dùng. 
+Ví dụ, hình 1 (c) chứa tất cả 5-gram của chuỗi ký tự trong hình 1 (b). Lưu ý rằng gần như số k-gram bằng với số các ký tự có trong tài liệu, vì mọi vị trí trong tài liệu (trừ k - 1 vị trí cuối cùng) đều đánh dấu sự bắt đầucủa một k-gram. Bây giờ băm mỗi k-gram và chọn một số tập hợp con
+của các băm này là các dấu vân tay của tài liệu. 
+Trong tất cả các thực tế phương pháp tiếp cận, bộ dấu vân tay là một tập con nhỏ của bộ tất cả
+k-gram băm. Nếu băm được chọn để xác suất va chạm là rất nhỏ, sau đó bất cứ khi nào hai tài liệu chia sẻ một hoặc nhiều dấu vân tay, điều đó có thể đồng nghĩa với việc họ cũng có chung một k-gram.
+
